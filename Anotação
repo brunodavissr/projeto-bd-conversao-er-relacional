@@ -1,0 +1,3 @@
+restrição semântica utilizar "CHECK" ex:
+CHECK (cpf is not nul or identidade is not null).
+
