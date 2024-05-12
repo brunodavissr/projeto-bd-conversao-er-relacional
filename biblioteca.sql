@@ -24,7 +24,7 @@ CREATE TABLE "Funcionario_Biblioteca" (
   );
 
 CREATE TABLE "Titulo" (
-  "ISBN" CHAR(13),
+  "ISBN" CHAR(13) PRIMARY KEY,
   "nome_Titulo" VARCHAR(100) NOT NULL,
   "area_Princip" VARCHAR(100) NOT NULL,
   "assunto" TEXT NOT NULL,
@@ -34,9 +34,14 @@ CREATE TABLE "Titulo" (
   "idioma" TEXT NOT NULL,
   "prazo_Emprestimo_Professor" INTEGER NOT NULL,
   "prazo_Emprestimo_Aluno" INTEGER NOT NULL,
-  "numero_Max_Renov" INTEGER NOT NULL,
-  PRIMARY KEY("ISBN")
+  "numero_Max_Renov" INTEGER NOT NULL
   );
+
+CREATE TABLE "Titulo_Periodico" (
+  "
+  
+
+
   
   
   
