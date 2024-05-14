@@ -1,15 +1,15 @@
-CREATE TABLE "unidade_atendimento" (
+CREATE TABLE "unidades_atendimento" (
   "codigo" INTEGER,
   "nome" TEXT NOT NULL,
   "endereco" TEXT NOT NULL
   PRIMARY KEY("codigo")
 );
 
-CREATE TABLE "Unidade_Academica" ( 
+CREATE TABLE "unidades_academicas" (
   "codigo" INTEGER,
-  "nome" VARCHAR(50) NOT NULL,
+  "nome" TEXT NOT NULL UNIQUE,
   PRIMARY KEY("codigo")
-  );
+);
 
 CREATE TABLE "Disciplina" (
   "codigo" INTEGER,
