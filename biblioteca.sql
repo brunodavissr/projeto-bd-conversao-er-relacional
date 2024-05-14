@@ -17,11 +17,11 @@ CREATE TABLE "cursos" (
   PRIMARY KEY("codigo")
 );
 
-CREATE TABLE "Disciplina" (
+CREATE TABLE "disciplinas" (
   "codigo" INTEGER,
-  "nome" VARCHAR(50) NOT NULL,
+  "nome" TEXT NOT NULL,
   PRIMARY KEY("codigo")
-  );
+);
 
 CREATE TABLE "Funcionario_Biblioteca" (
   "codigo" INTEGER,
