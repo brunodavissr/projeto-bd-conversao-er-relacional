@@ -4,5 +4,9 @@ CHECK (cpf is not nul or identidade is not null).
 Cada atributo multivalorado será colocado em uma tabela 
 separada cuja chave será uma chave composta pelo 
 atributo identificador do tipo de entidade que está sendo 
-convertida mais o próprio atributo multivalorad
+convertida mais o próprio atributo multivalorado
+
+-Entidades Regular sem especialização:
+-Unidade de atendimento, unidade academica, curso, disciplina.
+
 
