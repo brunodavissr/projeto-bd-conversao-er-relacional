@@ -11,6 +11,12 @@ CREATE TABLE "unidades_academicas" (
   PRIMARY KEY("codigo")
 );
 
+CREATE TABLE "cursos" (
+  "codigo" INTEGER,
+  "nome" TEXT NOT NULL UNIQUE,
+  PRIMARY KEY("codigo")
+);
+
 CREATE TABLE "Disciplina" (
   "codigo" INTEGER,
   "nome" VARCHAR(50) NOT NULL,
