@@ -5,6 +5,13 @@ CREATE TABLE "unidades_atendimento" (
   PRIMARY KEY("codigo")
 );
 
+CREATE TABLE "telefones" (
+  "codigo_unidade" INTEGER,
+  "telefone" INTEGER NOT NULL,
+  PRIMARY KEY("codigo_unidade", "telefone")
+  FOREIGN KEY("codigo_unidade") REFERENCES "unidades_atendimento"("codigo")
+);
+
 CREATE TABLE "unidades_academicas" (
   "codigo" INTEGER,
   "nome" TEXT NOT NULL UNIQUE,
