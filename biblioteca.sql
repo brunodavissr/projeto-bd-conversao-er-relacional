@@ -1,82 +1,82 @@
 CREATE TABLE "unidades_atendimento" (
-  "codigo" INTEGER NOT NULL,
-  "nome" TEXT NOT NULL,
-  "endereco" TEXT NOT NULL
+  "codigo" INTEGER(3) NOT NULL,
+  "nome" VARCHAR(50) NOT NULL UNIQUE,
+  "endereco" VARCHAR(200) NOT NULL
   PRIMARY KEY("codigo")
 );
 
 CREATE TABLE "telefones" (
-  "codigo_unidade" INTEGER NOT NULL,
-  "telefone" INTEGER NOT NULL,
+  "codigo_unidade" INTEGER(3) NOT NULL,
+  "telefone" INTEGER(10) NOT NULL,
   PRIMARY KEY("codigo_unidade", "telefone")
   FOREIGN KEY("codigo_unidade") REFERENCES "unidades_atendimento"("codigo")
 );
 
 CREATE TABLE "unidades_academicas" (
-  "codigo" INTEGER NOT NULL,
-  "nome" TEXT NOT NULL UNIQUE,
+  "codigo" CHAR(4) NOT NULL,
+  "nome" VARCHAR(50) NOT NULL UNIQUE,
   PRIMARY KEY("codigo")
 );
 
 CREATE TABLE "cursos" (
-  "codigo" INTEGER NOT NULL,
-  "nome" TEXT NOT NULL UNIQUE,
+  "codigo" INTEGER(3) NOT NULL,
+  "nome" VARCHAR(50) NOT NULL UNIQUE,
   PRIMARY KEY("codigo")
 );
 
 CREATE TABLE "disciplinas" (
-  "codigo" INTEGER NOT NULL,
-  "nome" TEXT NOT NULL,
+  "codigo" CHAR(7) NOT NULL,
+  "nome" VARCHAR(50) NOT NULL,
   PRIMARY KEY("codigo")
 );
 
 CREATE TABLE "funcionarios_biblioteca" (
-  "matricula" INTEGER NOT NULL,
-  "nome" TEXT NOT NULL,
-  "tipo_funcionario" TEXT NOT NULL,
+  "matricula" INTEGER(5) NOT NULL,
+  "nome" VARCHAR(50) NOT NULL,
+  "tipo_funcionario" CHAR(1) NOT NULL,
   PRIMARY KEY("codigo")
 );
 
 CREATE TABLE "titulos" (
-  "isbn" INTEGER NOT NULL,
-  "nome_titulo" TEXT NOT NULL,
-  "area_principal" TEXT NOT NULL,
-  "assunto" TEXT NOT NULL,
-  "ano_publicacao" INTEGER NOT NULL,
-  "editora" TEXT NOT NULL,
-  "idioma" TEXT NOT NULL,
-  "prazo_emprestimo_professor" INTEGER NOT NULL,
-  "prazo_emprestimo_aluno" INTEGER NOT NULL,
-  "numero_max_renovacao" INTEGER NOT NULL,
-  "edicao" INTEGER NULL,
-  "periodicidade" TEXT NULL CHECK("periodicidade" IN ("semanal", "quinzenal", "mensal", "trimestral", "quadrimestral", "semestral", "anual")),
-  "tipo" TEXT NULL CHECK("tipo" IN ("J", "R", "B")),
+  "isbn" INTEGER(5) NOT NULL,
+  "nome_titulo" VARCHAR(100) NOT NULL,
+  "area_principal" VARCHAR(100) NOT NULL,
+  "assunto" VARCHAR(100) NOT NULL,
+  "ano_publicacao" INTEGER(4) NOT NULL,
+  "editora" VARCHAR(50) NOT NULL,
+  "idioma" CHAR(1) NOT NULL,
+  "prazo_emprestimo_professor" INTEGER(2) NOT NULL,
+  "prazo_emprestimo_aluno" INTEGER(2) NOT NULL,
+  "numero_max_renovacao" INTEGER(2) NOT NULL,
+  "edicao" INTEGER(3) NULL,
+  "periodicidade" CHAR(15) NULL CHECK("periodicidade" IN ("semanal", "quinzenal", "mensal", "trimestral", "quadrimestral", "semestral", "anual")),
+  "tipo" CHAR(1) NULL CHECK("tipo" IN ("J", "R", "B")),
   PRIMARY KEY("isbn")
 );
 
 CREATE TABLE "autores" (
-  "isbn_titulo" INTEGER NOT NULL,
-  "autor" TEXT NOT NULL,
-  PRIMARY KEY("isbn_titulo","autor"),
+  "isbn_titulo" INTEGER(5) NOT NULL,
+  "autor" VARCHAR(100) NOT NULL,
+  PRIMARY KEY("isbn_titulo", "autor"),
   FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn")
 );
 
 CREATE TABLE "areas_secundarias" (
-  "isbn_titulo" INTEGER NOT NULL,
-  "area_secundaria" TEXT NOT NULL,
+  "isbn_titulo" INTEGER(5) NOT NULL,
+  "area_secundaria" VARCHAR(100) NOT NULL,
   PRIMARY KEY("isbn_titulo","area_secundaria"),
   FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn")
 );
 
 CREATE TABLE "usuarios_biblioteca" (
-  "codigo" INTEGER NOT NULL,
-  "nome" TEXT NOT NULL,
-  "identidade" TEXT NULL,
-  "cpf" TEXT NULL,
-  "endereco" TEXT NOT NULL,
-  "sexo" TEXT NOT NULL CHECK("sexo" IN ("M", "F")),
-  "data_nascimento" NUMERIC NOT NULL,
-  "estado_civil" TEXT NOT NULL CHECK("estado_civil" IN ("C", "S", "D", "V")),
-  "matricula_professor" INTEGER NULL,
+  "codigo" INTEGER(5) NOT NULL,
+  "nome" VARCHAR(50) NOT NULL,
+  "identidade" CHAR(12) NULL,
+  "cpf" CHAR(14) NULL,
+  "endereco" VARCHAR(100) NOT NULL,
+  "sexo" CHAR(1) NOT NULL CHECK("sexo" IN ("M", "F")),
+  "data_nascimento" DATE NOT NULL,
+  "estado_civil" CHAR(1) NOT NULL CHECK("estado_civil" IN ("C", "S", "D", "V")),
+  "matricula_professor" INTEGER(5) NULL UNIQUE,
   PRIMARY KEY ("codigo")
 );
