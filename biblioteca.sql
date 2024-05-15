@@ -30,31 +30,42 @@ CREATE TABLE "disciplinas" (
   PRIMARY KEY("codigo")
 );
 
-CREATE TABLE "Funcionario_Biblioteca" (
-  "codigo" INTEGER,
-  "nome" VARCHAR(50) NOT NULL,
+CREATE TABLE "funcionarios_biblioteca" (
+  "matricula" INTEGER,
+  "nome" TEXT NOT NULL,
+  "tipo" TEXT NOT NULL,
   PRIMARY KEY("codigo")
   );
 
-CREATE TABLE "Titulo" (
-  "ISBN" CHAR(13) PRIMARY KEY,
-  "nome_Titulo" VARCHAR(100) NOT NULL,
-  "area_Princip" VARCHAR(100) NOT NULL,
+CREATE TABLE "titulos" (
+  "isbn" INTEGER,
+  "nome_titulo" TEXT NOT NULL,
+  "area_principal" TEXT NOT NULL,
   "assunto" TEXT NOT NULL,
-  "area_Secun" VARCHAR(50) NULL,
-  "ano_Public" INTEGER NOT NULL,
-  "editora" VARCHAR(50) NOT NULL,
+  "ano_publicacao" INTEGER NOT NULL,
+  "editora" TEXT NOT NULL,
   "idioma" TEXT NOT NULL,
-  "prazo_Emprestimo_Professor" INTEGER NOT NULL,
-  "prazo_Emprestimo_Aluno" INTEGER NOT NULL,
-  "numero_Max_Renov" INTEGER NOT NULL
-  );
+  "prazo_emprestimo_professor" INTEGER NOT NULL,
+  "prazo_emprestimo_aluno" INTEGER NOT NULL,
+  "numero_max_renovacao" INTEGER NOT NULL,
+  "edicao" INTEGER NULL,
+  "periodicidade" TEXT NULL CHECK("periodicidade" IN ("semanal", "quinzenal", "mensal", "trimestral", "quadrimestral", "semestral", "anual")),
+  "tipo" TEXT NULL CHECK("tipo" IN ("J", "R", "B")),
+  PRIMARY KEY("isbn")
+);
 
-CREATE TABLE "Titulo_Periodico" (
-  "
-  
+CREATE TABLE "autores" (
+  "isbn_titulo" INTEGER,
+  "autor" TEXT NOT NULL,
+  PRIMARY KEY("isbn_titulo","autor"),
+  FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn")
+);
 
+CREATE TABLE "areas_secundarias" (
+  "isbn_titulo" INTEGER,
+  "area_secundaria" TEXT NOT NULL,
+  PRIMARY KEY("isbn_titulo","area_secundaria"),
+  FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn")
+);
 
-  
-  
-  
+CREATE TABLE "
