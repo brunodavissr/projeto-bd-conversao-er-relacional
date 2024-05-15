@@ -1,8 +1,10 @@
 CREATE TABLE "unidades_atendimento" (
   "codigo" INTEGER NOT NULL,
+  "matricula_bibliotecaria" INTEGER NOT NULL,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
   "endereco" VARCHAR(200) NOT NULL,
   PRIMARY KEY("codigo")
+  FOREIGN KEY("matricula_bibliotecaria") REFERENCES "funcionarios_biblioteca"("matricula")
 );
 
 CREATE TABLE "telefones_unidades" (
