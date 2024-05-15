@@ -33,7 +33,7 @@ CREATE TABLE "disciplinas" (
 CREATE TABLE "funcionarios_biblioteca" (
   "matricula" INTEGER(5) NOT NULL,
   "nome" VARCHAR(50) NOT NULL,
-  "tipo_funcionario" CHAR(1) NOT NULL CHECH("tipo_funcionario" IN ("A", "B")),
+  "tipo_funcionario" CHAR(1) NOT NULL CHECK("tipo_funcionario" IN ("A", "B")),
   PRIMARY KEY("codigo")
 );
 
@@ -50,7 +50,8 @@ CREATE TABLE "titulos" (
   "numero_max_renovacao" INTEGER(2) NOT NULL,
   "edicao" INTEGER(3) NULL,
   "periodicidade" CHAR(15) NULL CHECK("periodicidade" IN ("SEMANAL", "QUINZENAL", "MENSAL", "TRIMESTRAL", "QUADRIMESTRAL", "SEMESTRAL", "ANUAL")),
-  "tipo" CHAR(1) NULL CHECK("tipo" IN ("J", "R", "B")),
+  "tipo_periodico" CHAR(1) NULL CHECK("tipo" IN ("J", "R", "B")),
+  "tipo_titulo" CHAR(1) NOT NULL CHECK("tipo_titulo" IN ("L", "P")),
   PRIMARY KEY("isbn")
 );
 
