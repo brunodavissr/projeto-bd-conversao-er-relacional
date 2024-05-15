@@ -1,6 +1,6 @@
 CREATE TABLE "unidades_atendimento" (
   "codigo" INTEGER NOT NULL,
-  "matricula_bibliotecaria" INTEGER NOT NULL,
+  "matricula_bibliotecaria" INTEGER NOT NULL UNIQUE,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
   "endereco" VARCHAR(200) NOT NULL,
   PRIMARY KEY("codigo")
