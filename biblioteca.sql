@@ -88,7 +88,7 @@ CREATE TABLE "telefones_usuarios" (
   FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
 );
 
-CREATE TABLE "transacao" (
+CREATE TABLE "transacoes" (
   "numero_transacao" INTEGER(9) NOT NULL,
   "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
