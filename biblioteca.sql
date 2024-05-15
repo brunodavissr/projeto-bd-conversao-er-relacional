@@ -80,7 +80,9 @@ CREATE TABLE "usuarios_biblioteca" (
   "data_nascimento" DATE NOT NULL,
   "estado_civil" CHAR(1) NOT NULL CHECK("estado_civil" IN ("C", "S", "D", "V")),
   "matricula_professor" INTEGER(5) NULL UNIQUE,
+  "tipo_usuario" CHAR(1) NOT NULL CHECK("tipo_usuario" IN ("A", "P")),
   PRIMARY KEY ("codigo")
+  --Adicionar verificação para caso usuário seja professor, ter a mátricula preenchida obrigatoriamente
 );
 
 CREATE TABLE "telefones_usuarios" (
