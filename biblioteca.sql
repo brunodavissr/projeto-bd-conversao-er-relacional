@@ -105,7 +105,8 @@ CREATE TABLE "copias_titulos" (
   "isbn_titulo" INTEGER(5) NOT NULL,
   "secao_copia" INTEGER(4) NOT NULL,
   "estante_copia" INTEGER(3) NOT NULL,
-  PRIMARY KEY("numero_copia", "isbn_titulo")
+  PRIMARY KEY("numero_copia", "isbn_titulo"),
+  FOREIGN KEY("isbn_titulo")
 );
 
 CREATE TABLE "itens_emprestimo" (
