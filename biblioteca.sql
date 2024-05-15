@@ -15,7 +15,7 @@ CREATE TABLE "telefones_unidades" (
 CREATE TABLE "unidades_academicas" (
   "codigo" CHAR(4) NOT NULL,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
-  PRIMARY KEY("codigo")
+  PRIMARY KEY("codigo") 
 );
 
 CREATE TABLE "cursos" (
@@ -106,7 +106,7 @@ CREATE TABLE "copias_titulos" (
   "secao_copia" INTEGER(4) NOT NULL,
   "estante_copia" INTEGER(3) NOT NULL,
   PRIMARY KEY("numero_copia", "isbn_titulo"),
-  FOREIGN KEY("isbn_titulo")
+  FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn")
 );
 
 CREATE TABLE "itens_emprestimo" (
@@ -114,5 +114,5 @@ CREATE TABLE "itens_emprestimo" (
   "numero_transacao" INTEGER(9) NOT NULL,
   "data_limite_devolucao" DATE NOT NULL,
   PRIMARY KEY("numero_item", "numero_transacao"),
-  FOREIGN KEY("numero_transacao")
+  FOREIGN KEY("numero_transacao") REFERENCES "titulos"("isbn")
 );
