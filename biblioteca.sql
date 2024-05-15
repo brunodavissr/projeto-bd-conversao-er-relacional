@@ -49,7 +49,7 @@ CREATE TABLE "titulos" (
   "prazo_emprestimo_aluno" INTEGER(2) NOT NULL,
   "numero_max_renovacao" INTEGER(2) NOT NULL,
   "edicao" INTEGER(3) NULL,
-  "periodicidade" CHAR(15) NULL CHECK("periodicidade" IN ("semanal", "quinzenal", "mensal", "trimestral", "quadrimestral", "semestral", "anual")),
+  "periodicidade" CHAR(15) NULL CHECK("periodicidade" IN ("SEMANAL", "QUINZENAL", "MENSAL", "TRIMESTRAL", "QUADRIMESTRAL", "SEMESTRAL", "ANUAL")),
   "tipo" CHAR(1) NULL CHECK("tipo" IN ("J", "R", "B")),
   PRIMARY KEY("isbn")
 );
@@ -86,4 +86,12 @@ CREATE TABLE "telefones_usuarios" (
   "telefone" INTEGER(10) NOT NULL,
   PRIMARY KEY("codigo_usuario", "telefone"),
   FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
+);
+
+CREATE TABLE "transacao" (
+  "numero_transacao" INTEGER(9) NOT NULL,
+  "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
+  "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
+  "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ("EMPRESTIMO", "DEVOLUÇÃO", "RENOVAÇÃO", "RESERVA")),
+  PRIMARY KEY("numero_transacao")
 );
