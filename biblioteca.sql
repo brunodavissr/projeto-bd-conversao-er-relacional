@@ -1,44 +1,44 @@
 CREATE TABLE "unidades_atendimento" (
-  "codigo" INTEGER,
+  "codigo" INTEGER NOT NULL,
   "nome" TEXT NOT NULL,
   "endereco" TEXT NOT NULL
   PRIMARY KEY("codigo")
 );
 
 CREATE TABLE "telefones" (
-  "codigo_unidade" INTEGER,
+  "codigo_unidade" INTEGER NOT NULL,
   "telefone" INTEGER NOT NULL,
   PRIMARY KEY("codigo_unidade", "telefone")
   FOREIGN KEY("codigo_unidade") REFERENCES "unidades_atendimento"("codigo")
 );
 
 CREATE TABLE "unidades_academicas" (
-  "codigo" INTEGER,
+  "codigo" INTEGER NOT NULL,
   "nome" TEXT NOT NULL UNIQUE,
   PRIMARY KEY("codigo")
 );
 
 CREATE TABLE "cursos" (
-  "codigo" INTEGER,
+  "codigo" INTEGER NOT NULL,
   "nome" TEXT NOT NULL UNIQUE,
   PRIMARY KEY("codigo")
 );
 
 CREATE TABLE "disciplinas" (
-  "codigo" INTEGER,
+  "codigo" INTEGER NOT NULL,
   "nome" TEXT NOT NULL,
   PRIMARY KEY("codigo")
 );
 
 CREATE TABLE "funcionarios_biblioteca" (
-  "matricula" INTEGER,
+  "matricula" INTEGER NOT NULL,
   "nome" TEXT NOT NULL,
-  "tipo" TEXT NOT NULL,
+  "tipo_funcionario" TEXT NOT NULL,
   PRIMARY KEY("codigo")
-  );
+);
 
 CREATE TABLE "titulos" (
-  "isbn" INTEGER,
+  "isbn" INTEGER NOT NULL,
   "nome_titulo" TEXT NOT NULL,
   "area_principal" TEXT NOT NULL,
   "assunto" TEXT NOT NULL,
@@ -55,21 +55,21 @@ CREATE TABLE "titulos" (
 );
 
 CREATE TABLE "autores" (
-  "isbn_titulo" INTEGER,
+  "isbn_titulo" INTEGER NOT NULL,
   "autor" TEXT NOT NULL,
   PRIMARY KEY("isbn_titulo","autor"),
   FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn")
 );
 
 CREATE TABLE "areas_secundarias" (
-  "isbn_titulo" INTEGER,
+  "isbn_titulo" INTEGER NOT NULL,
   "area_secundaria" TEXT NOT NULL,
   PRIMARY KEY("isbn_titulo","area_secundaria"),
   FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn")
 );
 
 CREATE TABLE "usuarios_biblioteca" (
-  "codigo" INTEGER,
+  "codigo" INTEGER NOT NULL,
   "nome" TEXT NOT NULL,
   "identidade" TEXT NULL,
   "cpf" TEXT NULL,
