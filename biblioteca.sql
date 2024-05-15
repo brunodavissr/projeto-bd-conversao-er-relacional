@@ -68,4 +68,15 @@ CREATE TABLE "areas_secundarias" (
   FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn")
 );
 
-CREATE TABLE "
+CREATE TABLE "usuarios_biblioteca" (
+  "codigo" INTEGER,
+  "nome" TEXT NOT NULL,
+  "identidade" TEXT NULL,
+  "cpf" TEXT NULL,
+  "endereco" TEXT NOT NULL,
+  "sexo" TEXT NOT NULL CHECK("sexo" IN ("M", "F")),
+  "data_nascimento" NUMERIC NOT NULL,
+  "estado_civil" TEXT NOT NULL CHECK("estado_civil" IN ("C", "S", "D", "V")),
+  "matricula_professor" INTEGER NULL,
+  PRIMARY KEY ("codigo")
+);
