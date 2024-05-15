@@ -5,7 +5,7 @@ CREATE TABLE "unidades_atendimento" (
   PRIMARY KEY("codigo")
 );
 
-CREATE TABLE "telefones" (
+CREATE TABLE "telefones_unidades" (
   "codigo_unidade" INTEGER(3) NOT NULL,
   "telefone" INTEGER(10) NOT NULL,
   PRIMARY KEY("codigo_unidade", "telefone")
@@ -79,4 +79,11 @@ CREATE TABLE "usuarios_biblioteca" (
   "estado_civil" CHAR(1) NOT NULL CHECK("estado_civil" IN ("C", "S", "D", "V")),
   "matricula_professor" INTEGER(5) NULL UNIQUE,
   PRIMARY KEY ("codigo")
+);
+
+CREATE TABLE "telefones_usuarios" (
+  "codigo_usuario" INTEGER(5) NOT NULL,
+  "telefone" INTEGER(10) NOT NULL,
+  PRIMARY KEY("codigo_usuario", "telefone"),
+  FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
 );
