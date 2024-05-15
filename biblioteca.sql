@@ -95,3 +95,11 @@ CREATE TABLE "transacoes" (
   "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ("EMPRESTIMO", "DEVOLUÇÃO", "RENOVAÇÃO", "RESERVA")),
   PRIMARY KEY("numero_transacao")
 );
+
+CREATE TABLE "copias_titulos" (
+  "numero_copia" INTEGER(5) NOT NULL,
+  "isbn_titulo" INTEGER(5) NOT NULL,
+  "secao_copia" INTEGER(4) NOT NULL,
+  "estante_copia" INTEGER(3) NOT NULL,
+  PRIMARY KEY("numero_copia", "isbn_titulo")
+);
