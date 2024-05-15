@@ -33,7 +33,7 @@ CREATE TABLE "disciplinas" (
 CREATE TABLE "funcionarios_biblioteca" (
   "matricula" INTEGER(5) NOT NULL,
   "nome" VARCHAR(50) NOT NULL,
-  "tipo_funcionario" CHAR(1) NOT NULL,
+  "tipo_funcionario" CHAR(1) NOT NULL CHECH("tipo_funcionario" IN ("A", "B")),
   PRIMARY KEY("codigo")
 );
 
