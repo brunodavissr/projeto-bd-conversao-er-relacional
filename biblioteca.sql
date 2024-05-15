@@ -107,3 +107,11 @@ CREATE TABLE "copias_titulos" (
   "estante_copia" INTEGER(3) NOT NULL,
   PRIMARY KEY("numero_copia", "isbn_titulo")
 );
+
+CREATE TABLE "itens_emprestimo" (
+  "numero_item" INTEGER(1) NOT NULL,
+  "numero_transacao" INTEGER(9) NOT NULL,
+  "data_limite_devolucao" DATE NOT NULL,
+  PRIMARY KEY("numero_item", "numero_transacao"),
+  FOREIGN KEY("numero_transacao")
+);
