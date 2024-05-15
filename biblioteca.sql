@@ -114,5 +114,5 @@ CREATE TABLE "itens_emprestimo" (
   "numero_transacao" INTEGER(9) NOT NULL,
   "data_limite_devolucao" DATE NOT NULL,
   PRIMARY KEY("numero_item", "numero_transacao"),
-  FOREIGN KEY("numero_transacao") REFERENCES "titulos"("isbn")
+  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao")
 );
