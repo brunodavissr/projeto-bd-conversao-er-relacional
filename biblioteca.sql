@@ -25,13 +25,8 @@ CREATE TABLE "telefones_unidades" (
 
 CREATE TABLE "unidades_academicas" (
   "codigo" CHAR(4) NOT NULL,
-  "codigo_curso" INTEGER NOT NULL,
-  "matricula_professor" INTEGER NOT NULL,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
-  "codigo_unidade" INTEGER NOT NULL,
-  PRIMARY KEY("codigo"),
-  FOREIGN KEY("matricula_professor") REFERENCES "funcionarios_biblioteca"("matricula"),
-  FOREIGN KEY 
+  PRIMARY KEY("codigo")
 );
 
 CREATE TABLE "cursos" (
