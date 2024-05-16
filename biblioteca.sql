@@ -1,6 +1,9 @@
 CREATE TABLE "funcionarios_biblioteca" (
   "matricula" INTEGER NOT NULL,
-  "codigo_unidade" INTEGER NULL CHECK("tipo_funcionario" = 'A' AND "codigo_unidade" IS NOT NULL),
+  "codigo_unidade" INTEGER NULL CHECK(
+    ("tipo_funcionario" = 'A' AND "codigo_unidade" IS NOT NULL) OR
+    ("tipo_funcionario" = 'B' AND "codigo_unidade" IS NULL)
+  ),
   "nome" VARCHAR(50) NOT NULL,
   "tipo_funcionario" CHAR(1) NOT NULL CHECK("tipo_funcionario" IN ('A', 'B')),
   PRIMARY KEY("matricula"),
