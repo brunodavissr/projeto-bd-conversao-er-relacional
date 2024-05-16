@@ -32,7 +32,9 @@ CREATE TABLE "unidades_academicas" (
 CREATE TABLE "cursos" (
   "codigo" INTEGER NOT NULL,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
-  PRIMARY KEY("codigo")
+  "codigo_unidade" CHAR(4) NOT NULL,
+  PRIMARY KEY("codigo"),
+  FOREIGN KEY("codigo_unidade") REFERENCES "unidades_academicas"("codigo")
 );
 
 CREATE TABLE "disciplinas" (
