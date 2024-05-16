@@ -76,6 +76,10 @@ CREATE TABLE "areas_secundarias" (
 
 CREATE TABLE "usuarios_biblioteca" (
   "codigo" INTEGER NOT NULL,
+  "numero_emprestimo" INTEGER NOT NULL,
+  "numero_devolucao" INTEGER NOT NULL,
+  "numero_renovacao" INTEGER NOT NULL,
+  "numero_reserva" INTEGER NOT NULL,
   "nome" VARCHAR(50) NOT NULL,
   "identidade" CHAR(12) NULL,
   "cpf" CHAR(14) NULL,
@@ -85,7 +89,11 @@ CREATE TABLE "usuarios_biblioteca" (
   "estado_civil" CHAR(1) NOT NULL CHECK("estado_civil" IN ('C', 'S', 'D', 'V')),
   "matricula_professor" INTEGER NULL UNIQUE,
   "tipo_usuario" CHAR(1) NOT NULL CHECK("tipo_usuario" IN ('A', 'P')),
-  PRIMARY KEY ("codigo")
+  PRIMARY KEY ("codigo"),
+  FOREIGN KEY("numero_emprestimo") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("numero_devolucao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("numero_renovacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("numero_reserva") REFERENCES "transacoes"("numero_transacao") 
   --Adicionar verificação para caso usuário seja professor, ter a mátricula preenchida obrigatoriamente
 );
 
