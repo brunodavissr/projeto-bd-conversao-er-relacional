@@ -3,7 +3,7 @@ CREATE TABLE "unidades_atendimento" (
   "matricula_bibliotecaria" INTEGER NOT NULL UNIQUE,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
   "endereco" VARCHAR(200) NOT NULL,
-  PRIMARY KEY("codigo")
+  PRIMARY KEY("codigo"),
   FOREIGN KEY("matricula_bibliotecaria") REFERENCES "funcionarios_biblioteca"("matricula")
 );
 
@@ -117,4 +117,14 @@ CREATE TABLE "itens_emprestimo" (
   "data_limite_devolucao" DATE NOT NULL,
   PRIMARY KEY("numero_item", "numero_transacao"),
   FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao")
+);
+
+CREATE TABLE "curso_aluno" (
+  "codigo_curso" INTEGER NOT NULL,
+  "codigo_aluno" INTEGER NOT NULL,
+  "matricula" INTEGER NOT NULL UNIQUE,
+  PRIMARY KEY("codigo_curso", "codigo_aluno"),
+  FOREIGN KEY("codigo_curso") REFERENCES "cursos"("codigo"),
+  FOREIGN KEY("codigo_aluno") REFERENCES "usuarios_biblioteca"("codigo")
+  --Checar se o código aluno é realmente de um aluno
 );
