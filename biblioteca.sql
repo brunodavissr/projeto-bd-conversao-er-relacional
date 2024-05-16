@@ -127,7 +127,7 @@ CREATE TABLE "itens_emprestimo" (
   "data_limite_devolucao" DATE NOT NULL,
   PRIMARY KEY("numero_item", "numero_transacao"),
   FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
-  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo"),
+  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
 );
 
 CREATE TABLE "cursos_aluno" (
