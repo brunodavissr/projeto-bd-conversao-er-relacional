@@ -27,9 +27,10 @@ CREATE TABLE "unidades_academicas" (
   "codigo" CHAR(4) NOT NULL,
   "matricula_professor" INTEGER NOT NULL,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
-  --"codigo_unidade" INTEGER NOT NULL,
+  "codigo_unidade" INTEGER NOT NULL,
   PRIMARY KEY("codigo"),
-  FOREIGN KEY("matricula_professor") REFERENCES "funcionarios_biblioteca"("matricula")
+  FOREIGN KEY("matricula_professor") REFERENCES "funcionarios_biblioteca"("matricula"),
+  FOREIGN KEY 
 );
 
 CREATE TABLE "cursos" (
@@ -79,10 +80,6 @@ CREATE TABLE "areas_secundarias" (
 
 CREATE TABLE "usuarios_biblioteca" (
   "codigo" INTEGER NOT NULL,
-  "numero_emprestimo" INTEGER NOT NULL,
-  "numero_devolucao" INTEGER NOT NULL,
-  "numero_renovacao" INTEGER NOT NULL,
-  "numero_reserva" INTEGER NOT NULL,
   "nome" VARCHAR(50) NOT NULL,
   "identidade" CHAR(12) NULL,
   "cpf" CHAR(14) NULL,
@@ -93,10 +90,6 @@ CREATE TABLE "usuarios_biblioteca" (
   "matricula_professor" INTEGER NULL UNIQUE,
   "tipo_usuario" CHAR(1) NOT NULL CHECK("tipo_usuario" IN ('A', 'P')),
   PRIMARY KEY ("codigo"),
-  FOREIGN KEY("numero_emprestimo") REFERENCES "transacoes"("numero_transacao"),
-  FOREIGN KEY("numero_devolucao") REFERENCES "transacoes"("numero_transacao"),
-  FOREIGN KEY("numero_renovacao") REFERENCES "transacoes"("numero_transacao"),
-  FOREIGN KEY("numero_reserva") REFERENCES "transacoes"("numero_transacao") 
   --Adicionar verificação para caso usuário seja professor, ter a mátricula preenchida obrigatoriamente
 );
 
@@ -109,12 +102,20 @@ CREATE TABLE "telefones_usuarios" (
 
 CREATE TABLE "transacoes" (
   "numero_transacao" INTEGER NOT NULL,
+  "codigo_emprestimo" INTEGER NOT NULL,
+  "codigo_devolucao" INTEGER NOT NULL,
+  "codigo_renovacao" INTEGER NOT NULL,
+  "codigo_reserva" INTEGER NOT NULL,
   "matricula_atendente" INTEGER NOT NULL,
   "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
   "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ('EMPRESTIMO', 'DEVOLUÇÃO', 'RENOVAÇÃO', 'RESERVA')),
   PRIMARY KEY("numero_transacao"),
-  FOREIGN KEY("matricula_atendente") REFERENCES "funcionarios_biblioteca"("matricula")
+  FOREIGN KEY("matricula_atendente") REFERENCES "funcionarios_biblioteca"("matricula"),
+  FOREIGN KEY("codigo_emprestimo") REFERENCES "usuarios_biblioteca"("codigo"),
+  FOREIGN KEY("codigo_devolucao") REFERENCES "usuarios_biblioteca"("codigo"),
+  FOREIGN KEY("codigo_renovacao") REFERENCES "usuarios_biblioteca"("codigo"),
+  FOREIGN KEY("codigo_reserva") REFERENCES "usuarios_biblioteca"("codigo") 
 );
 
 CREATE TABLE "copias_titulos" (
