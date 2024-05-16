@@ -144,7 +144,6 @@ CREATE TABLE "cursos_aluno" (
   PRIMARY KEY("codigo_curso", "codigo_aluno"),
   FOREIGN KEY("codigo_curso") REFERENCES "cursos"("codigo"),
   FOREIGN KEY("codigo_aluno") REFERENCES "usuarios_biblioteca"("codigo")
-  --Checar se o código aluno é realmente de um aluno
 );
 
 CREATE TABLE "disciplinas_professor" (
