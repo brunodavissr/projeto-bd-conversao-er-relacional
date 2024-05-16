@@ -25,6 +25,7 @@ CREATE TABLE "telefones_unidades" (
 
 CREATE TABLE "unidades_academicas" (
   "codigo" CHAR(4) NOT NULL,
+  "codigo_curso" INTEGER NOT NULL,
   "matricula_professor" INTEGER NOT NULL,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
   "codigo_unidade" INTEGER NOT NULL,
@@ -102,20 +103,14 @@ CREATE TABLE "telefones_usuarios" (
 
 CREATE TABLE "transacoes" (
   "numero_transacao" INTEGER NOT NULL,
-  "codigo_emprestimo" INTEGER NOT NULL,
-  "codigo_devolucao" INTEGER NOT NULL,
-  "codigo_renovacao" INTEGER NOT NULL,
-  "codigo_reserva" INTEGER NOT NULL,
+  "codigo_usuario" INTEGER NOT NULL,
   "matricula_atendente" INTEGER NOT NULL,
   "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
   "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ('EMPRESTIMO', 'DEVOLUÇÃO', 'RENOVAÇÃO', 'RESERVA')),
   PRIMARY KEY("numero_transacao"),
   FOREIGN KEY("matricula_atendente") REFERENCES "funcionarios_biblioteca"("matricula"),
-  FOREIGN KEY("codigo_emprestimo") REFERENCES "usuarios_biblioteca"("codigo"),
-  FOREIGN KEY("codigo_devolucao") REFERENCES "usuarios_biblioteca"("codigo"),
-  FOREIGN KEY("codigo_renovacao") REFERENCES "usuarios_biblioteca"("codigo"),
-  FOREIGN KEY("codigo_reserva") REFERENCES "usuarios_biblioteca"("codigo") 
+  FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
 );
 
 CREATE TABLE "copias_titulos" (
