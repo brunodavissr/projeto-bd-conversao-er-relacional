@@ -119,10 +119,14 @@ CREATE TABLE "copias_titulos" (
 
 CREATE TABLE "itens_emprestimo" (
   "numero_item" INTEGER NOT NULL,
+  "numero_copia" INTEGER NOT NULL,
+  "isbn_titulo" INTEGER NOT NULL,
   "numero_transacao" INTEGER NOT NULL,
   "data_limite_devolucao" DATE NOT NULL,
   PRIMARY KEY("numero_item", "numero_transacao"),
-  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao")
+  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn"),
+  FOREIGN KEY("numero_copia") REFERENCES "copias_titulos"("numero_copia")
 );
 
 CREATE TABLE "cursos_aluno" (
