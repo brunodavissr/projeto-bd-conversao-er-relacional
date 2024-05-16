@@ -146,3 +146,11 @@ CREATE TABLE "cursos_aluno" (
   FOREIGN KEY("codigo_aluno") REFERENCES "usuarios_biblioteca"("codigo")
   --Checar se o código aluno é realmente de um aluno
 );
+
+CREATE TABLE "disciplinas_professor" (
+  "codigo_disciplina" CHAR(7) NOT NULL,
+  "matricula_professor" INTEGER NOT NULL,
+  PRIMARY KEY("codigo_disciplina", "matricula_professor"),
+  FOREIGN KEY("codigo_disciplina") REFERENCES "disciplinas"("codigo")
+  FOREIGN KEY("matricula_professor") REFERENCES "usuarios_biblioteca"("matricula_professor")
+);
