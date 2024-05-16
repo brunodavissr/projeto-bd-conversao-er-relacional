@@ -1,8 +1,10 @@
 CREATE TABLE "funcionarios_biblioteca" (
   "matricula" INTEGER NOT NULL,
+  "codigo_unidade" INTEGER NULL,
   "nome" VARCHAR(50) NOT NULL,
   "tipo_funcionario" CHAR(1) NOT NULL CHECK("tipo_funcionario" IN ('A', 'B')),
-  PRIMARY KEY("matricula")
+  PRIMARY KEY("matricula"),
+  FOREIGN KEY("codigo_unidade") REFERENCES "unidades_atendimento"("codigo")
 );
 
 CREATE TABLE "unidades_atendimento" (
