@@ -76,6 +76,7 @@ CREATE TABLE "areas_secundarias" (
 
 CREATE TABLE "usuarios_biblioteca" (
   "codigo" INTEGER NOT NULL,
+  "codigo_unidade" CHAR(4) NULL CHECK("tipo_usuario" = 'P' AND "codigo_unidade" IS NOT NULL),
   "nome" VARCHAR(50) NOT NULL,
   "identidade" CHAR(12) NULL,
   "cpf" CHAR(14) NULL,
@@ -86,6 +87,7 @@ CREATE TABLE "usuarios_biblioteca" (
   "matricula_professor" INTEGER NULL UNIQUE,
   "tipo_usuario" CHAR(1) NOT NULL CHECK("tipo_usuario" IN ('A', 'P')),
   PRIMARY KEY ("codigo"),
+  FOREIGN KEY("codigo_unidade") REFERENCES "unidades_academicas"("codigo")
   --Adicionar verificação para caso usuário seja professor, ter a mátricula preenchida obrigatoriamente
 );
 
