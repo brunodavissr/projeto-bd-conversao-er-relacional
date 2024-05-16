@@ -98,10 +98,12 @@ CREATE TABLE "telefones_usuarios" (
 
 CREATE TABLE "transacoes" (
   "numero_transacao" INTEGER NOT NULL,
+  "matricula_atendente" INTEGER NOT NULL,
   "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
   "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ('EMPRESTIMO', 'DEVOLUÇÃO', 'RENOVAÇÃO', 'RESERVA')),
-  PRIMARY KEY("numero_transacao")
+  PRIMARY KEY("numero_transacao"),
+  FOREIGN KEY("matricula_atendente") REFERENCES "funcionarios_biblioteca"("matricula")
 );
 
 CREATE TABLE "copias_titulos" (
