@@ -1,3 +1,10 @@
+CREATE TABLE "funcionarios_biblioteca" (
+  "matricula" INTEGER NOT NULL,
+  "nome" VARCHAR(50) NOT NULL,
+  "tipo_funcionario" CHAR(1) NOT NULL CHECK("tipo_funcionario" IN ('A', 'B')),
+  PRIMARY KEY("matricula")
+);
+
 CREATE TABLE "unidades_atendimento" (
   "codigo" INTEGER NOT NULL,
   "matricula_bibliotecaria" INTEGER NOT NULL UNIQUE,
@@ -30,13 +37,6 @@ CREATE TABLE "disciplinas" (
   "codigo" CHAR(7) NOT NULL,
   "nome" VARCHAR(50) NOT NULL,
   PRIMARY KEY("codigo")
-);
-
-CREATE TABLE "funcionarios_biblioteca" (
-  "matricula" INTEGER NOT NULL,
-  "nome" VARCHAR(50) NOT NULL,
-  "tipo_funcionario" CHAR(1) NOT NULL CHECK("tipo_funcionario" IN ('A', 'B')),
-  PRIMARY KEY("matricula")
 );
 
 CREATE TABLE "titulos" (
