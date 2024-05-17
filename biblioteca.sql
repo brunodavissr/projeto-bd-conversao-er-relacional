@@ -62,7 +62,10 @@ CREATE TABLE "titulos" (
   "tipo_periodico" CHAR(1) NULL CHECK("tipo_periodico" IN ('J', 'R', 'B')),
   "tipo_titulo" CHAR(1) NOT NULL CHECK("tipo_titulo" IN ('L', 'P')),
   PRIMARY KEY("isbn")
-  --Adicionar check para verificar se cada tipo de entidade está preenchida com seus dados corretamente.
+  CHECK(
+    ("tipo_titulo" = 'L' AND "edicao" IS NOT NULL AND "periodicidade" IS NULL AND "tipo_periodico" IS NULL) OR
+    ("tipo_titulo" = 'P' AND "periodicidade" IS NOT NULL AND "tipo_periodico" IS NOT NULL AND "edicao" IS NULL)
+  )
 );
 
 CREATE TABLE "autores" (
