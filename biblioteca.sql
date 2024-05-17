@@ -93,11 +93,13 @@ CREATE TABLE "usuarios_biblioteca" (
   "sexo" CHAR(1) NOT NULL CHECK("sexo" IN ('M', 'F')),
   "data_nascimento" DATE NOT NULL,
   "estado_civil" CHAR(1) NOT NULL CHECK("estado_civil" IN ('C', 'S', 'D', 'V')),
-  "matricula_professor" INTEGER NULL UNIQUE,
+  "matricula_professor" INTEGER NULL UNIQUE CHECK(
+    ("tipo_usuario" = 'P' AND "matricula_professor" IS NOT NULL) OR
+    ("tipo_usuario" = 'A' AND "matricula_professor" IS NULL)
+  ),
   "tipo_usuario" CHAR(1) NOT NULL CHECK("tipo_usuario" IN ('A', 'P')),
   PRIMARY KEY ("codigo"),
   FOREIGN KEY("codigo_unidade") REFERENCES "unidades_academicas"("codigo")
-  --Adicionar verificação para caso usuário seja professor, ter a mátricula preenchida obrigatoriamente
 );
 
 CREATE TABLE "telefones_usuarios" (
