@@ -112,7 +112,7 @@ CREATE TABLE "telefones_usuarios" (
 CREATE TABLE "transacoes" (
   "numero_transacao" INTEGER NOT NULL,
   "codigo_usuario" INTEGER NOT NULL,
-  "matricula_atendente" INTEGER NOT NULL,
+  "matricula_atendente" INTEGER NOT NULL --Verificar se matricula é realmente de um atendente,
   "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
   "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ('EMPRESTIMO', 'DEVOLUÇÃO', 'RENOVAÇÃO', 'RESERVA')),
