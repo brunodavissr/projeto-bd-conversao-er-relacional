@@ -17,6 +17,7 @@ CREATE TABLE "unidades_atendimento" (
   "endereco" VARCHAR(200) NOT NULL,
   PRIMARY KEY("codigo"),
   FOREIGN KEY("matricula_bibliotecaria") REFERENCES "funcionarios_biblioteca"("matricula")
+  --Verificar se matricula_bibliotecaria está realmente referenciando uma bibliotecaria
 );
 
 CREATE TABLE "telefones_unidades" (
