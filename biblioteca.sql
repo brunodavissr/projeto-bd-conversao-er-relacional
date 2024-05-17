@@ -129,6 +129,7 @@ CREATE TABLE "copias_titulos" (
   PRIMARY KEY("numero_copia", "isbn_titulo"),
   FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn"),
   FOREIGN KEY("codigo_unidade") REFERENCES "unidades_atendimento"("codigo")
+  --Analisar melhor sobre os relacionamentos envolvendo está entidade
 );
 
 CREATE TABLE "itens_emprestimo" (
@@ -140,11 +141,12 @@ CREATE TABLE "itens_emprestimo" (
   PRIMARY KEY("numero_item", "numero_transacao"),
   FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
   FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
+  --Analisar melhor sobre os relacionamentos envolvendo está entidade
 );
 
 CREATE TABLE "cursos_aluno" (
   "codigo_curso" INTEGER NOT NULL,
-  "codigo_aluno" INTEGER NOT NULL,
+  "codigo_aluno" INTEGER NOT NULL --Verificar se o código é realmente de um aluno,
   "matricula" INTEGER NOT NULL UNIQUE,
   PRIMARY KEY("codigo_curso", "codigo_aluno"),
   FOREIGN KEY("codigo_curso") REFERENCES "cursos"("codigo"),
