@@ -12,12 +12,11 @@ CREATE TABLE "funcionarios_biblioteca" (
 
 CREATE TABLE "unidades_atendimento" (
   "codigo" INTEGER NOT NULL,
-  "matricula_bibliotecaria" INTEGER NOT NULL UNIQUE,
+  "matricula_bibliotecaria" INTEGER NOT NULL UNIQUE  --Verificar se a matricula é realmente de uma bibliotecaria,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
   "endereco" VARCHAR(200) NOT NULL,
   PRIMARY KEY("codigo"),
   FOREIGN KEY("matricula_bibliotecaria") REFERENCES "funcionarios_biblioteca"("matricula")
-  --Verificar se matricula_bibliotecaria está realmente referenciando uma bibliotecaria
 );
 
 CREATE TABLE "telefones_unidades" (
@@ -112,7 +111,7 @@ CREATE TABLE "telefones_usuarios" (
 CREATE TABLE "transacoes" (
   "numero_transacao" INTEGER NOT NULL,
   "codigo_usuario" INTEGER NOT NULL,
-  "matricula_atendente" INTEGER NOT NULL --Verificar se matricula é realmente de um atendente,
+  "matricula_atendente" INTEGER NOT NULL --Verificar se a matricula é realmente de uma atendente,
   "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
   "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ('EMPRESTIMO', 'DEVOLUÇÃO', 'RENOVAÇÃO', 'RESERVA')),
