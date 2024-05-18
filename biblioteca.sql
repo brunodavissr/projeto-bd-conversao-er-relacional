@@ -1,3 +1,8 @@
+--TODO:
+--TROCAR A ORDEM DAS TABELAS funcionarios_biblioteca E unidades_atendimento UMA COM A OUTRA
+--COLOCAR O ATRIBUTO QUE INDICA A BIBLIOTECARIA DE UMA UNIDADE DE ATENDIMENTO NA TABELA funcionarios_biblioteca E TIRAR DE unidades_atendimento
+--CONVERTER AS ESPECIALIZAÇÕES DE FUNCIONÁRIO, USUÁRIO E TRANSAÇÃO PARA O TIPO B
+
 CREATE TABLE "funcionarios_biblioteca" (
   "matricula" NUMERIC(5) NOT NULL,
   "codigo_unidade" NUMERIC(3) NULL CHECK(
