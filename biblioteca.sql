@@ -144,7 +144,7 @@ CREATE TABLE "itens_emprestimo" (
     ("numero_devolucao" IS NULL AND "situacao_copia" IS NULL)
   ),
   "multa_atraso" NUMERIC(7, 2) NULL DEFAULT 0 CHECK(NOT("numero_devolucao" IS NULL AND "multa_atraso" IS NOT NULL)),
-  "multa_dano" NUMERIC(7, 2) NULL DEFAULT 0 CHECK(NOT("numero_devolucao" IS NULL AND "multa_atraso" IS NOT NULL)),
+  "multa_dano" NUMERIC(7, 2) NULL DEFAULT 0 CHECK(NOT("numero_devolucao" IS NULL AND "multa_dano" IS NOT NULL)),
   PRIMARY KEY("numero_item", "numero_emprestimo"),
   FOREIGN KEY("numero_emprestimo") REFERENCES "transacoes"("numero_transacao"),
   FOREIGN KEY("numero_devolucao") REFERENCES "transacoes"("numero_transacao"),
