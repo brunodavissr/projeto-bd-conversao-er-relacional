@@ -84,7 +84,10 @@ CREATE TABLE "areas_secundarias" (
 
 CREATE TABLE "usuarios_biblioteca" (
   "codigo" NUMERIC(5) NOT NULL,
-  "codigo_unidade" CHAR(4) NULL CHECK("tipo_usuario" = 'P' AND "codigo_unidade" IS NOT NULL),
+  "codigo_unidade" CHAR(4) NULL CHECK(
+    ("tipo_usuario" = 'P' AND "codigo_unidade" IS NOT NULL) OR
+    ("tipo_usuario" = 'A' AND "codigo_unidade" IS NULL)
+  ),
   "nome" VARCHAR(50) NOT NULL,
   "identidade" CHAR(12) NULL,
   "cpf" CHAR(14) NULL,
