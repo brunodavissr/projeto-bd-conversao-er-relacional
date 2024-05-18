@@ -12,7 +12,7 @@ CREATE TABLE "funcionarios_biblioteca" (
 
 CREATE TABLE "unidades_atendimento" (
   "codigo" NUMERIC(3) NOT NULL,
-  "matricula_bibliotecaria" NUMERIC(5) NOT NULL UNIQUE,  --Verificar se a matricula é realmente de uma bibliotecaria
+  "matricula_bibliotecaria" NUMERIC(5) NOT NULL UNIQUE,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
   "endereco" VARCHAR(200) NOT NULL,
   PRIMARY KEY("codigo"),
@@ -114,7 +114,7 @@ CREATE TABLE "telefones_usuarios" (
 CREATE TABLE "transacoes" (
   "numero_transacao" NUMERIC(9) NOT NULL,
   "codigo_usuario" NUMERIC(5) NOT NULL,
-  "matricula_atendente" NUMERIC(5) NOT NULL, --Verificar se a matricula é realmente de uma atendente
+  "matricula_atendente" NUMERIC(5) NOT NULL,
   "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
   "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ('EMPRESTIMO', 'DEVOLUÇÃO', 'RENOVAÇÃO', 'RESERVA')),
@@ -132,7 +132,6 @@ CREATE TABLE "copias_titulos" (
   PRIMARY KEY("numero_copia", "isbn_titulo"),
   FOREIGN KEY("isbn_titulo") REFERENCES "titulos"("isbn"),
   FOREIGN KEY("codigo_unidade") REFERENCES "unidades_atendimento"("codigo")
-  --Analisar melhor sobre os relacionamentos envolvendo está entidade
 );
 
 CREATE TABLE "itens_emprestimo" (
@@ -152,7 +151,6 @@ CREATE TABLE "itens_emprestimo" (
   FOREIGN KEY("numero_emprestimo") REFERENCES "transacoes"("numero_transacao"),
   FOREIGN KEY("numero_devolucao") REFERENCES "transacoes"("numero_transacao"),
   FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
-  --Analisar melhor sobre os relacionamentos envolvendo está entidade
 );
 
 CREATE TABLE "itens_renovacao" (
@@ -167,7 +165,7 @@ CREATE TABLE "itens_renovacao" (
 
 CREATE TABLE "cursos_aluno" (
   "codigo_curso" NUMERIC(3) NOT NULL,
-  "codigo_aluno" NUMERIC(5) NOT NULL, --Verificar se o código é realmente de um aluno
+  "codigo_aluno" NUMERIC(5) NOT NULL,
   "matricula" NUMERIC(5) NOT NULL UNIQUE,
   PRIMARY KEY("codigo_curso", "codigo_aluno"),
   FOREIGN KEY("codigo_curso") REFERENCES "cursos"("codigo"),
