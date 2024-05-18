@@ -178,3 +178,13 @@ CREATE TABLE "disciplinas_professor" (
   FOREIGN KEY("codigo_disciplina") REFERENCES "disciplinas"("codigo")
   FOREIGN KEY("matricula_professor") REFERENCES "usuarios_biblioteca"("matricula_professor")
 );
+
+CREATE TABLE "copias_reservadas" (
+  "numero_reserva" NUMERIC(9) NOT NULL,
+  "numero_copia" NUMERIC(5) NOT NULL,
+  "isbn_titulo" NUMERIC(5) NOT NULL,
+  "data_reservada" DATE NOT NULL,
+  PRIMARY KEY("numero_reserva", "numero_copia", "isbn_titulo"),
+  FOREIGN KEY("numero_reserva") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
+);
