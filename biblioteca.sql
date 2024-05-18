@@ -138,7 +138,7 @@ CREATE TABLE "itens_emprestimo" (
   "numero_devolucao" NUMERIC(9) NULL,
   "numero_copia" NUMERIC(5) NOT NULL,
   "isbn_titulo" NUMERIC(5) NOT NULL,
-  "data_limite_devolucao" DATE NOT NULL,
+  "data_devolucao" DATE NOT NULL,
   "situacao_copia" CHAR(1) NULL CHECK(
     ("numero_devolucao" IS NOT NULL AND "situacao_copia" IN('I', 'D')) OR
     ("numero_devolucao" IS NULL AND "situacao_copia" IS NULL)
@@ -150,6 +150,16 @@ CREATE TABLE "itens_emprestimo" (
   FOREIGN KEY("numero_devolucao") REFERENCES "transacoes"("numero_transacao"),
   FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
   --Analisar melhor sobre os relacionamentos envolvendo está entidade
+);
+
+CREATE TABLE "itens_renovacao" (
+  "numero_renovacao" NUMERIC(9) NOT NULL,
+  "numero_emprestimo" NUMERIC(9) NOT NULL,
+  "numero_item" NUMERIC(1) NOT NULL,
+  "data_devolucao" DATE NOT NULL, 
+  PRIMARY KEY("numero_renovacao", "numero_emprestimo", "numero_item"),
+  FOREIGN KEY("numero_renovacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("numero_emprestimo", "numero_item") REFERENCES "itens_emprestimo"("numero_emprestimo", "numero_item")
 );
 
 CREATE TABLE "cursos_aluno" (
