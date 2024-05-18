@@ -12,7 +12,7 @@ CREATE TABLE "funcionarios_biblioteca" (
 
 CREATE TABLE "unidades_atendimento" (
   "codigo" NUMERIC(3) NOT NULL,
-  "matricula_bibliotecaria" NUMERIC(5) NOT NULL UNIQUE  --Verificar se a matricula é realmente de uma bibliotecaria,
+  "matricula_bibliotecaria" NUMERIC(5) NOT NULL UNIQUE,  --Verificar se a matricula é realmente de uma bibliotecaria
   "nome" VARCHAR(50) NOT NULL UNIQUE,
   "endereco" VARCHAR(200) NOT NULL,
   PRIMARY KEY("codigo"),
@@ -61,7 +61,7 @@ CREATE TABLE "titulos" (
   "periodicidade" CHAR(15) NULL CHECK("periodicidade" IN ('SEMANAL', 'QUINZENAL', 'MENSAL', 'TRIMESTRAL', 'QUADRIMESTRAL', 'SEMESTRAL', 'ANUAL')),
   "tipo_periodico" CHAR(1) NULL CHECK("tipo_periodico" IN ('J', 'R', 'B')),
   "tipo_titulo" CHAR(1) NOT NULL CHECK("tipo_titulo" IN ('L', 'P')),
-  PRIMARY KEY("isbn")
+  PRIMARY KEY("isbn"),
   CHECK(
     ("tipo_titulo" = 'L' AND "edicao" IS NOT NULL AND "periodicidade" IS NULL AND "tipo_periodico" IS NULL) OR
     ("tipo_titulo" = 'P' AND "periodicidade" IS NOT NULL AND "tipo_periodico" IS NOT NULL AND "edicao" IS NULL)
@@ -114,7 +114,7 @@ CREATE TABLE "telefones_usuarios" (
 CREATE TABLE "transacoes" (
   "numero_transacao" NUMERIC(9) NOT NULL,
   "codigo_usuario" NUMERIC(5) NOT NULL,
-  "matricula_atendente" NUMERIC(5) NOT NULL --Verificar se a matricula é realmente de uma atendente,
+  "matricula_atendente" NUMERIC(5) NOT NULL, --Verificar se a matricula é realmente de uma atendente
   "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
   "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ('EMPRESTIMO', 'DEVOLUÇÃO', 'RENOVAÇÃO', 'RESERVA')),
@@ -126,7 +126,7 @@ CREATE TABLE "transacoes" (
 CREATE TABLE "copias_titulos" (
   "numero_copia" NUMERIC(5) NOT NULL,
   "isbn_titulo" NUMERIC(5) NOT NULL,
-  "codigo_unidade" NUMERIC(3) NOT NULL, 
+  "codigo_unidade" NUMERIC(3) NOT NULL,
   "secao_copia" NUMERIC(4) NOT NULL,
   "estante_copia" NUMERIC(3) NOT NULL,
   PRIMARY KEY("numero_copia", "isbn_titulo"),
@@ -159,7 +159,7 @@ CREATE TABLE "itens_renovacao" (
   "numero_renovacao" NUMERIC(9) NOT NULL,
   "numero_emprestimo" NUMERIC(9) NOT NULL,
   "numero_item" NUMERIC(1) NOT NULL,
-  "data_devolucao" DATE NOT NULL, 
+  "data_devolucao" DATE NOT NULL,
   PRIMARY KEY("numero_renovacao", "numero_emprestimo", "numero_item"),
   FOREIGN KEY("numero_renovacao") REFERENCES "transacoes"("numero_transacao"),
   FOREIGN KEY("numero_emprestimo", "numero_item") REFERENCES "itens_emprestimo"("numero_emprestimo", "numero_item")
@@ -167,7 +167,7 @@ CREATE TABLE "itens_renovacao" (
 
 CREATE TABLE "cursos_aluno" (
   "codigo_curso" NUMERIC(3) NOT NULL,
-  "codigo_aluno" NUMERIC(5) NOT NULL --Verificar se o código é realmente de um aluno,
+  "codigo_aluno" NUMERIC(5) NOT NULL, --Verificar se o código é realmente de um aluno
   "matricula" NUMERIC(5) NOT NULL UNIQUE,
   PRIMARY KEY("codigo_curso", "codigo_aluno"),
   FOREIGN KEY("codigo_curso") REFERENCES "cursos"("codigo"),
@@ -178,7 +178,7 @@ CREATE TABLE "disciplinas_professor" (
   "codigo_disciplina" CHAR(7) NOT NULL,
   "matricula_professor" NUMERIC(5) NOT NULL,
   PRIMARY KEY("codigo_disciplina", "matricula_professor"),
-  FOREIGN KEY("codigo_disciplina") REFERENCES "disciplinas"("codigo")
+  FOREIGN KEY("codigo_disciplina") REFERENCES "disciplinas"("codigo"),
   FOREIGN KEY("matricula_professor") REFERENCES "usuarios_biblioteca"("matricula_professor")
 );
 
