@@ -134,12 +134,20 @@ CREATE TABLE "copias_titulos" (
 
 CREATE TABLE "itens_emprestimo" (
   "numero_item" NUMERIC(1) NOT NULL,
-  "numero_transacao" NUMERIC(9) NOT NULL,
+  "numero_emprestimo" NUMERIC(9) NOT NULL,
+  "numero_devolucao" NUMERIC(9) NULL,
   "numero_copia" NUMERIC(5) NOT NULL,
   "isbn_titulo" NUMERIC(5) NOT NULL,
   "data_limite_devolucao" DATE NOT NULL,
-  PRIMARY KEY("numero_item", "numero_transacao"),
-  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
+  "situacao_copia" CHAR(1) NULL CHECK(
+    ("numero_devolucao" IS NOT NULL AND "situacao_copia" IN('I', 'D')) OR
+    ("numero_devolucao" IS NULL AND "situacao_copia" IS NULL)
+  ),
+  "multa_atraso" NUMERIC(7, 2) NULL DEFAULT 0 CHECK(NOT("numero_devolucao" IS NULL AND "multa_atraso" IS NOT NULL)),
+  "multa_dano" NUMERIC(7, 2) NULL DEFAULT 0 CHECK(NOT("numero_devolucao" IS NULL AND "multa_atraso" IS NOT NULL)),
+  PRIMARY KEY("numero_item", "numero_emprestimo"),
+  FOREIGN KEY("numero_emprestimo") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("numero_devolucao") REFERENCES "transacoes"("numero_transacao"),
   FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
   --Analisar melhor sobre os relacionamentos envolvendo está entidade
 );
