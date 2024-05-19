@@ -3,25 +3,28 @@
 --COLOCAR O ATRIBUTO QUE INDICA A BIBLIOTECARIA DE UMA UNIDADE DE ATENDIMENTO NA TABELA funcionarios_biblioteca E TIRAR DE unidades_atendimento
 --CONVERTER AS ESPECIALIZAÇÕES DE FUNCIONÁRIO, USUÁRIO E TRANSAÇÃO PARA O TIPO B
 
+CREATE TABLE "unidades_atendimento" (
+  "codigo" NUMERIC(3) NOT NULL,
+  "nome" VARCHAR(50) NOT NULL UNIQUE,
+  "endereco" VARCHAR(200) NOT NULL,
+  PRIMARY KEY("codigo")
+);
+
 CREATE TABLE "funcionarios_biblioteca" (
   "matricula" NUMERIC(5) NOT NULL,
-  "codigo_unidade" NUMERIC(3) NULL CHECK(
-    ("tipo_funcionario" = 'A' AND "codigo_unidade" IS NOT NULL) OR
-    ("tipo_funcionario" = 'B' AND "codigo_unidade" IS NULL)
+  "unidade_atendente" NUMERIC(3) NULL CHECK(
+    ("tipo_funcionario" = 'A' AND "unidade_atendente" IS NOT NULL) OR
+    ("tipo_funcionario" = 'B' AND "unidade_atendente" IS NULL)
+  ),
+  "unidade_bibliotecaria" NUMERIC(3) NULL CHECK(
+      ("tipo_funcionario" = 'B' AND "unidade_bibliotecaria" IS NOT NULL) OR
+      ("tipo_funcionario" = 'A' AND "unidade_bibliotecaria" IS NULL)
   ),
   "nome" VARCHAR(50) NOT NULL,
   "tipo_funcionario" CHAR(1) NOT NULL CHECK("tipo_funcionario" IN ('A', 'B')),
   PRIMARY KEY("matricula"),
-  FOREIGN KEY("codigo_unidade") REFERENCES "unidades_atendimento"("codigo")
-);
-
-CREATE TABLE "unidades_atendimento" (
-  "codigo" NUMERIC(3) NOT NULL,
-  "matricula_bibliotecaria" NUMERIC(5) NOT NULL UNIQUE,
-  "nome" VARCHAR(50) NOT NULL UNIQUE,
-  "endereco" VARCHAR(200) NOT NULL,
-  PRIMARY KEY("codigo"),
-  FOREIGN KEY("matricula_bibliotecaria") REFERENCES "funcionarios_biblioteca"("matricula")
+  FOREIGN KEY("unidade_atendente") REFERENCES "unidades_atendimento"("codigo"),
+  FOREIGN KEY("unidade_bibliotecaria") REFERENCES "unidades_atendimento"("codigo")
 );
 
 CREATE TABLE "telefones_unidades" (
