@@ -60,13 +60,22 @@ CREATE TABLE "titulos" (
   "prazo_emprestimo_aluno" NUMERIC(2) NOT NULL,
   "numero_max_renovacao" NUMERIC(2) NOT NULL,
   "edicao" NUMERIC(3) NULL,
-  "periodicidade" CHAR(15) NULL CHECK("periodicidade" IN ('SEMANAL', 'QUINZENAL', 'MENSAL', 'TRIMESTRAL', 'QUADRIMESTRAL', 'SEMESTRAL', 'ANUAL')),
-  "tipo_periodico" CHAR(1) NULL CHECK("tipo_periodico" IN ('J', 'R', 'B')),
-  "tipo_titulo" CHAR(1) NOT NULL CHECK("tipo_titulo" IN ('L', 'P')),
+  "periodicidade" CHAR(15) NULL,
+  "tipo_periodico" CHAR(1) NULL,
+  "tipo_titulo" CHAR(1) NOT NULL,
   PRIMARY KEY("isbn"),
-  CHECK(
+  CHECK (
     ("tipo_titulo" = 'L' AND "edicao" IS NOT NULL AND "periodicidade" IS NULL AND "tipo_periodico" IS NULL) OR
     ("tipo_titulo" = 'P' AND "periodicidade" IS NOT NULL AND "tipo_periodico" IS NOT NULL AND "edicao" IS NULL)
+  ),
+  CHECK (
+    "periodicidade" IN ('SEMANAL', 'QUINZENAL', 'MENSAL', 'TRIMESTRAL', 'QUADRIMESTRAL', 'SEMESTRAL', 'ANUAL')
+  ),
+  CHECK (
+    "tipo_periodico" IN ('J', 'R', 'B')
+  ),
+  CHECK (
+    "tipo_titulo" IN ('L', 'P')
   )
 );
 
@@ -90,10 +99,16 @@ CREATE TABLE "usuarios_biblioteca" (
   "identidade" CHAR(12) NULL,
   "cpf" CHAR(14) NULL,
   "endereco" VARCHAR(100) NOT NULL,
-  "sexo" CHAR(1) NOT NULL CHECK("sexo" IN ('M', 'F')),
+  "sexo" CHAR(1) NOT NULL,
   "data_nascimento" DATE NOT NULL,
-  "estado_civil" CHAR(1) NOT NULL CHECK("estado_civil" IN ('C', 'S', 'D', 'V'))
-  PRIMARY KEY ("codigo")
+  "estado_civil" CHAR(1) NOT NULL,
+  PRIMARY KEY ("codigo"),
+  CHECK (
+    "sexo" IN ('M', 'F')
+  ),
+  CHECK (
+    "estado_civil" IN ('C', 'S', 'D', 'V')
+  )
 );
 
 CREATE TABLE "alunos" (
@@ -177,16 +192,23 @@ CREATE TABLE "itens_emprestimo" (
   "numero_copia" NUMERIC(5) NOT NULL,
   "isbn_titulo" NUMERIC(5) NOT NULL,
   "data_devolucao" DATE NOT NULL,
-  "situacao_copia" CHAR(1) NULL CHECK(
-    ("numero_devolucao" IS NOT NULL AND "situacao_copia" IN('I', 'D')) OR
-    ("numero_devolucao" IS NULL AND "situacao_copia" IS NULL)
-  ),
-  "multa_atraso" NUMERIC(7, 2) NULL CHECK(NOT("numero_devolucao" IS NULL AND "multa_atraso" IS NOT NULL)),
-  "multa_dano" NUMERIC(7, 2) NULL CHECK(NOT("numero_devolucao" IS NULL AND "multa_dano" IS NOT NULL)),
+  "situacao_copia" CHAR(1) NULL,
+  "multa_atraso" NUMERIC(7, 2) NULL,
+  "multa_dano" NUMERIC(7, 2) NULL,
   PRIMARY KEY("numero_item", "numero_emprestimo"),
   FOREIGN KEY("numero_emprestimo") REFERENCES "emprestimos"("numero_transacao"),
   FOREIGN KEY("numero_devolucao") REFERENCES "devolucoes"("numero_transacao"),
-  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
+  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo"),
+  CHECK (
+    ("numero_devolucao" IS NOT NULL AND "situacao_copia" IN('I', 'D')) OR
+    ("numero_devolucao" IS NULL AND "situacao_copia" IS NULL)
+  ),
+  CHECK (
+    NOT("numero_devolucao" IS NULL AND "multa_atraso" IS NOT NULL)
+  ),
+  CHECK (
+    NOT("numero_devolucao" IS NULL AND "multa_dano" IS NOT NULL)
+  )
 );
 
 CREATE TABLE "itens_renovacao" (
