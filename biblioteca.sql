@@ -1,33 +1,27 @@
---TODO:
---TROCAR A ORDEM DAS TABELAS funcionarios_biblioteca E unidades_atendimento UMA COM A OUTRA
---COLOCAR O ATRIBUTO QUE INDICA A BIBLIOTECARIA DE UMA UNIDADE DE ATENDIMENTO NA TABELA funcionarios_biblioteca E TIRAR DE unidades_atendimento
---CONVERTER AS ESPECIALIZAÇÕES DE FUNCIONÁRIO, USUÁRIO E TRANSAÇÃO PARA O TIPO B
+CREATE TABLE "bibliotecarias" (
+  "matricula" NUMERIC(5) NOT NULL,
+  "nome" VARCHAR(50) NOT NULL,
+  PRIMARY KEY("matricula")
+);
 
 CREATE TABLE "unidades_atendimento" (
   "codigo" NUMERIC(3) NOT NULL,
+  "matricula_bibliotecaria" NUMERIC(5) NOT NULL UNIQUE,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
   "endereco" VARCHAR(200) NOT NULL,
-  PRIMARY KEY("codigo")
+  PRIMARY KEY("codigo"),
+  FOREIGN KEY("matricula_bibliotecaria") REFERENCES "bibliotecarias"("matricula")
 );
 
-CREATE TABLE "funcionarios_biblioteca" (
+CREATE TABLE "atendentes" (
   "matricula" NUMERIC(5) NOT NULL,
-  "unidade_atendente" NUMERIC(3) NULL CHECK(
-    ("tipo_funcionario" = 'A' AND "unidade_atendente" IS NOT NULL) OR
-    ("tipo_funcionario" = 'B' AND "unidade_atendente" IS NULL)
-  ),
-  "unidade_bibliotecaria" NUMERIC(3) NULL CHECK(
-      ("tipo_funcionario" = 'B' AND "unidade_bibliotecaria" IS NOT NULL) OR
-      ("tipo_funcionario" = 'A' AND "unidade_bibliotecaria" IS NULL)
-  ),
+  "codigo_unidade" NUMERIC(3) NOT NULL,
   "nome" VARCHAR(50) NOT NULL,
-  "tipo_funcionario" CHAR(1) NOT NULL CHECK("tipo_funcionario" IN ('A', 'B')),
   PRIMARY KEY("matricula"),
-  FOREIGN KEY("unidade_atendente") REFERENCES "unidades_atendimento"("codigo"),
-  FOREIGN KEY("unidade_bibliotecaria") REFERENCES "unidades_atendimento"("codigo")
+  FOREIGN KEY("codigo_unidade") REFERENCES "unidades_atendimento"("codigo")
 );
 
-CREATE TABLE "telefones_unidades" (
+CREATE TABLE "telefones_unidade" (
   "codigo_unidade" NUMERIC(3) NOT NULL,
   "telefone" NUMERIC(10) NOT NULL,
   PRIMARY KEY("codigo_unidade", "telefone"),
@@ -66,13 +60,22 @@ CREATE TABLE "titulos" (
   "prazo_emprestimo_aluno" NUMERIC(2) NOT NULL,
   "numero_max_renovacao" NUMERIC(2) NOT NULL,
   "edicao" NUMERIC(3) NULL,
-  "periodicidade" CHAR(15) NULL CHECK("periodicidade" IN ('SEMANAL', 'QUINZENAL', 'MENSAL', 'TRIMESTRAL', 'QUADRIMESTRAL', 'SEMESTRAL', 'ANUAL')),
-  "tipo_periodico" CHAR(1) NULL CHECK("tipo_periodico" IN ('J', 'R', 'B')),
-  "tipo_titulo" CHAR(1) NOT NULL CHECK("tipo_titulo" IN ('L', 'P')),
+  "periodicidade" CHAR(15) NULL,
+  "tipo_periodico" CHAR(1) NULL,
+  "tipo_titulo" CHAR(1) NOT NULL,
   PRIMARY KEY("isbn"),
-  CHECK(
+  CHECK (
     ("tipo_titulo" = 'L' AND "edicao" IS NOT NULL AND "periodicidade" IS NULL AND "tipo_periodico" IS NULL) OR
     ("tipo_titulo" = 'P' AND "periodicidade" IS NOT NULL AND "tipo_periodico" IS NOT NULL AND "edicao" IS NULL)
+  ),
+  CHECK (
+    "periodicidade" IN ('SEMANAL', 'QUINZENAL', 'MENSAL', 'TRIMESTRAL', 'QUADRIMESTRAL', 'SEMESTRAL', 'ANUAL')
+  ),
+  CHECK (
+    "tipo_periodico" IN ('J', 'R', 'B')
+  ),
+  CHECK (
+    "tipo_titulo" IN ('L', 'P')
   )
 );
 
@@ -92,27 +95,38 @@ CREATE TABLE "areas_secundarias" (
 
 CREATE TABLE "usuarios_biblioteca" (
   "codigo" NUMERIC(5) NOT NULL,
-  "codigo_unidade" CHAR(4) NULL CHECK(
-    ("tipo_usuario" = 'P' AND "codigo_unidade" IS NOT NULL) OR
-    ("tipo_usuario" = 'A' AND "codigo_unidade" IS NULL)
-  ),
   "nome" VARCHAR(50) NOT NULL,
   "identidade" CHAR(12) NULL,
   "cpf" CHAR(14) NULL,
   "endereco" VARCHAR(100) NOT NULL,
-  "sexo" CHAR(1) NOT NULL CHECK("sexo" IN ('M', 'F')),
+  "sexo" CHAR(1) NOT NULL,
   "data_nascimento" DATE NOT NULL,
-  "estado_civil" CHAR(1) NOT NULL CHECK("estado_civil" IN ('C', 'S', 'D', 'V')),
-  "matricula_professor" NUMERIC(5) NULL UNIQUE CHECK(
-    ("tipo_usuario" = 'P' AND "matricula_professor" IS NOT NULL) OR
-    ("tipo_usuario" = 'A' AND "matricula_professor" IS NULL)
-  ),
-  "tipo_usuario" CHAR(1) NOT NULL CHECK("tipo_usuario" IN ('A', 'P')),
+  "estado_civil" CHAR(1) NOT NULL,
   PRIMARY KEY ("codigo"),
+  CHECK (
+    "sexo" IN ('M', 'F')
+  ),
+  CHECK (
+    "estado_civil" IN ('C', 'S', 'D', 'V')
+  )
+);
+
+CREATE TABLE "alunos" (
+  "codigo" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("codigo"),
+  FOREIGN KEY("codigo") REFERENCES "usuarios_biblioteca"("codigo")
+);
+
+CREATE TABLE "professores" (
+  "codigo" NUMERIC(5) NOT NULL,
+  "codigo_unidade" CHAR(4) NOT NULL,
+  "matricula" NUMERIC(5) NOT NULL UNIQUE,
+  PRIMARY KEY("codigo"),
+  FOREIGN KEY("codigo") REFERENCES "usuarios_biblioteca"("codigo"),
   FOREIGN KEY("codigo_unidade") REFERENCES "unidades_academicas"("codigo")
 );
 
-CREATE TABLE "telefones_usuarios" (
+CREATE TABLE "telefones_usuario" (
   "codigo_usuario" NUMERIC(5) NOT NULL,
   "telefone" NUMERIC(10) NOT NULL,
   PRIMARY KEY("codigo_usuario", "telefone"),
@@ -121,17 +135,46 @@ CREATE TABLE "telefones_usuarios" (
 
 CREATE TABLE "transacoes" (
   "numero_transacao" NUMERIC(9) NOT NULL,
-  "codigo_usuario" NUMERIC(5) NOT NULL,
   "matricula_atendente" NUMERIC(5) NOT NULL,
   "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
-  "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ('EMPRESTIMO', 'DEVOLUÇÃO', 'RENOVAÇÃO', 'RESERVA')),
   PRIMARY KEY("numero_transacao"),
-  FOREIGN KEY("matricula_atendente") REFERENCES "funcionarios_biblioteca"("matricula"),
+  FOREIGN KEY("matricula_atendente") REFERENCES "atendentes"("matricula")
+);
+
+CREATE TABLE "emprestimos" (
+  "numero_transacao" NUMERIC(9) NOT NULL,
+  "codigo_usuario" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("numero_transacao"),
+  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
   FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
 );
 
-CREATE TABLE "copias_titulos" (
+CREATE TABLE "devolucoes" (
+  "numero_transacao" NUMERIC(9) NOT NULL,
+  "codigo_usuario" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("numero_transacao"),
+  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
+);
+
+CREATE TABLE "reservas" (
+  "numero_transacao" NUMERIC(9) NOT NULL,
+  "codigo_usuario" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("numero_transacao"),
+  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
+);
+
+CREATE TABLE "renovacoes" (
+  "numero_transacao" NUMERIC(9) NOT NULL,
+  "codigo_professor" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("numero_transacao"),
+  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("codigo_professor") REFERENCES "professores"("codigo")
+);
+
+CREATE TABLE "copias_titulo" (
   "numero_copia" NUMERIC(5) NOT NULL,
   "isbn_titulo" NUMERIC(5) NOT NULL,
   "codigo_unidade" NUMERIC(3) NOT NULL,
@@ -149,16 +192,23 @@ CREATE TABLE "itens_emprestimo" (
   "numero_copia" NUMERIC(5) NOT NULL,
   "isbn_titulo" NUMERIC(5) NOT NULL,
   "data_devolucao" DATE NOT NULL,
-  "situacao_copia" CHAR(1) NULL CHECK(
+  "situacao_copia" CHAR(1) NULL,
+  "multa_atraso" NUMERIC(7, 2) NULL,
+  "multa_dano" NUMERIC(7, 2) NULL,
+  PRIMARY KEY("numero_item", "numero_emprestimo"),
+  FOREIGN KEY("numero_emprestimo") REFERENCES "emprestimos"("numero_transacao"),
+  FOREIGN KEY("numero_devolucao") REFERENCES "devolucoes"("numero_transacao"),
+  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulo"("numero_copia", "isbn_titulo"),
+  CHECK (
     ("numero_devolucao" IS NOT NULL AND "situacao_copia" IN('I', 'D')) OR
     ("numero_devolucao" IS NULL AND "situacao_copia" IS NULL)
   ),
-  "multa_atraso" NUMERIC(7, 2) NULL DEFAULT 0 CHECK(NOT("numero_devolucao" IS NULL AND "multa_atraso" IS NOT NULL)),
-  "multa_dano" NUMERIC(7, 2) NULL DEFAULT 0 CHECK(NOT("numero_devolucao" IS NULL AND "multa_dano" IS NOT NULL)),
-  PRIMARY KEY("numero_item", "numero_emprestimo"),
-  FOREIGN KEY("numero_emprestimo") REFERENCES "transacoes"("numero_transacao"),
-  FOREIGN KEY("numero_devolucao") REFERENCES "transacoes"("numero_transacao"),
-  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
+  CHECK (
+    NOT("numero_devolucao" IS NULL AND "multa_atraso" IS NOT NULL)
+  ),
+  CHECK (
+    NOT("numero_devolucao" IS NULL AND "multa_dano" IS NOT NULL)
+  )
 );
 
 CREATE TABLE "itens_renovacao" (
@@ -167,7 +217,7 @@ CREATE TABLE "itens_renovacao" (
   "numero_item" NUMERIC(1) NOT NULL,
   "data_devolucao" DATE NOT NULL,
   PRIMARY KEY("numero_renovacao", "numero_emprestimo", "numero_item"),
-  FOREIGN KEY("numero_renovacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("numero_renovacao") REFERENCES "renovacoes"("numero_transacao"),
   FOREIGN KEY("numero_emprestimo", "numero_item") REFERENCES "itens_emprestimo"("numero_emprestimo", "numero_item")
 );
 
@@ -177,15 +227,15 @@ CREATE TABLE "cursos_aluno" (
   "matricula" NUMERIC(5) NOT NULL UNIQUE,
   PRIMARY KEY("codigo_curso", "codigo_aluno"),
   FOREIGN KEY("codigo_curso") REFERENCES "cursos"("codigo"),
-  FOREIGN KEY("codigo_aluno") REFERENCES "usuarios_biblioteca"("codigo")
+  FOREIGN KEY("codigo_aluno") REFERENCES "alunos"("codigo")
 );
 
 CREATE TABLE "disciplinas_professor" (
   "codigo_disciplina" CHAR(7) NOT NULL,
-  "matricula_professor" NUMERIC(5) NOT NULL,
-  PRIMARY KEY("codigo_disciplina", "matricula_professor"),
+  "codigo_professor" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("codigo_disciplina", "codigo_professor"),
   FOREIGN KEY("codigo_disciplina") REFERENCES "disciplinas"("codigo"),
-  FOREIGN KEY("matricula_professor") REFERENCES "usuarios_biblioteca"("matricula_professor")
+  FOREIGN KEY("codigo_professor") REFERENCES "professores"("codigo")
 );
 
 CREATE TABLE "copias_reservadas" (
@@ -194,6 +244,6 @@ CREATE TABLE "copias_reservadas" (
   "isbn_titulo" NUMERIC(5) NOT NULL,
   "data_reservada" DATE NOT NULL,
   PRIMARY KEY("numero_reserva", "numero_copia", "isbn_titulo"),
-  FOREIGN KEY("numero_reserva") REFERENCES "transacoes"("numero_transacao"),
-  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
+  FOREIGN KEY("numero_reserva") REFERENCES "reservas"("numero_transacao"),
+  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulo"("numero_copia", "isbn_titulo")
 );
