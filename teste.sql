@@ -5,26 +5,25 @@
 
 CREATE TABLE "unidades_atendimento" (
   "codigo" NUMERIC(3) NOT NULL,
+  "matricula_bibliotecaria" NUMERIC(5) NOT NULL UNIQUE,
   "nome" VARCHAR(50) NOT NULL UNIQUE,
   "endereco" VARCHAR(200) NOT NULL,
-  PRIMARY KEY("codigo")
+  PRIMARY KEY("codigo"),
+  FOREIGN KEY("matricula_bibliotecaria") REFERENCES "bibliotecarias"("matricula")
 );
 
-CREATE TABLE "funcionarios_biblioteca" (
+CREATE TABLE "atendentes" (
   "matricula" NUMERIC(5) NOT NULL,
-  "unidade_atendente" NUMERIC(3) NULL CHECK(
-    ("tipo_funcionario" = 'A' AND "unidade_atendente" IS NOT NULL) OR
-    ("tipo_funcionario" = 'B' AND "unidade_atendente" IS NULL)
-  ),
-  "unidade_bibliotecaria" NUMERIC(3) NULL CHECK(
-      ("tipo_funcionario" = 'B' AND "unidade_bibliotecaria" IS NOT NULL) OR
-      ("tipo_funcionario" = 'A' AND "unidade_bibliotecaria" IS NULL)
-  ),
+  "codigo_unidade" NUMERIC(3) NOT NULL,
   "nome" VARCHAR(50) NOT NULL,
-  "tipo_funcionario" CHAR(1) NOT NULL CHECK("tipo_funcionario" IN ('A', 'B')),
   PRIMARY KEY("matricula"),
-  FOREIGN KEY("unidade_atendente") REFERENCES "unidades_atendimento"("codigo"),
-  FOREIGN KEY("unidade_bibliotecaria") REFERENCES "unidades_atendimento"("codigo")
+  FOREIGN KEY("codigo_unidade") REFERENCES "unidades_atendimento"("codigo")
+);
+
+CREATE TABLE "bibliotecarias" (
+  "matricula" NUMERIC(5) NOT NULL,
+  "nome" VARCHAR(50) NOT NULL,
+  PRIMARY KEY("matricula")
 );
 
 CREATE TABLE "telefones_unidades" (
@@ -127,7 +126,7 @@ CREATE TABLE "transacoes" (
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
   "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ('EMPRESTIMO', 'DEVOLUÇÃO', 'RENOVAÇÃO', 'RESERVA')),
   PRIMARY KEY("numero_transacao"),
-  FOREIGN KEY("matricula_atendente") REFERENCES "funcionarios_biblioteca"("matricula"),
+  FOREIGN KEY("matricula_atendente") REFERENCES "atendentes"("matricula"),
   FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
 );
 
