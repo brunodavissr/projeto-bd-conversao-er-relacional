@@ -120,14 +120,43 @@ CREATE TABLE "telefones_usuario" (
 
 CREATE TABLE "transacoes" (
   "numero_transacao" NUMERIC(9) NOT NULL,
-  "codigo_usuario" NUMERIC(5) NOT NULL,
   "matricula_atendente" NUMERIC(5) NOT NULL,
   "data_transacao" DATE NOT NULL DEFAULT CURRENT_DATE,
   "horario_transacao" TIME NOT NULL DEFAULT CURRENT_TIME,
-  "tipo_transacao" CHAR(10) NOT NULL CHECK("tipo_transacao" IN ('EMPRESTIMO', 'DEVOLUÇÃO', 'RENOVAÇÃO', 'RESERVA')),
   PRIMARY KEY("numero_transacao"),
-  FOREIGN KEY("matricula_atendente") REFERENCES "atendentes"("matricula"),
+  FOREIGN KEY("matricula_atendente") REFERENCES "atendentes"("matricula")
+);
+
+CREATE TABLE "emprestimos" (
+  "numero_transacao" NUMERIC(9) NOT NULL,
+  "codigo_usuario" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("numero_transacao"),
+  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
   FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
+);
+
+CREATE TABLE "devolucoes" (
+  "numero_transacao" NUMERIC(9) NOT NULL,
+  "codigo_usuario" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("numero_transacao"),
+  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
+);
+
+CREATE TABLE "reservas" (
+  "numero_transacao" NUMERIC(9) NOT NULL,
+  "codigo_usuario" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("numero_transacao"),
+  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
+);
+
+CREATE TABLE "renovacoes" (
+  "numero_transacao" NUMERIC(9) NOT NULL,
+  "codigo_professor" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("numero_transacao"),
+  FOREIGN KEY("numero_transacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("codigo_professor") REFERENCES "professores"("codigo")
 );
 
 CREATE TABLE "copias_titulo" (
@@ -152,11 +181,11 @@ CREATE TABLE "itens_emprestimo" (
     ("numero_devolucao" IS NOT NULL AND "situacao_copia" IN('I', 'D')) OR
     ("numero_devolucao" IS NULL AND "situacao_copia" IS NULL)
   ),
-  "multa_atraso" NUMERIC(7, 2) NULL DEFAULT 0 CHECK(NOT("numero_devolucao" IS NULL AND "multa_atraso" IS NOT NULL)),
-  "multa_dano" NUMERIC(7, 2) NULL DEFAULT 0 CHECK(NOT("numero_devolucao" IS NULL AND "multa_dano" IS NOT NULL)),
+  "multa_atraso" NUMERIC(7, 2) NULL CHECK(NOT("numero_devolucao" IS NULL AND "multa_atraso" IS NOT NULL)),
+  "multa_dano" NUMERIC(7, 2) NULL CHECK(NOT("numero_devolucao" IS NULL AND "multa_dano" IS NOT NULL)),
   PRIMARY KEY("numero_item", "numero_emprestimo"),
-  FOREIGN KEY("numero_emprestimo") REFERENCES "transacoes"("numero_transacao"),
-  FOREIGN KEY("numero_devolucao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("numero_emprestimo") REFERENCES "emprestimos"("numero_transacao"),
+  FOREIGN KEY("numero_devolucao") REFERENCES "devolucoes"("numero_transacao"),
   FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
 );
 
@@ -166,7 +195,7 @@ CREATE TABLE "itens_renovacao" (
   "numero_item" NUMERIC(1) NOT NULL,
   "data_devolucao" DATE NOT NULL,
   PRIMARY KEY("numero_renovacao", "numero_emprestimo", "numero_item"),
-  FOREIGN KEY("numero_renovacao") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("numero_renovacao") REFERENCES "renovacoes"("numero_transacao"),
   FOREIGN KEY("numero_emprestimo", "numero_item") REFERENCES "itens_emprestimo"("numero_emprestimo", "numero_item")
 );
 
@@ -193,6 +222,6 @@ CREATE TABLE "copias_reservadas" (
   "isbn_titulo" NUMERIC(5) NOT NULL,
   "data_reservada" DATE NOT NULL,
   PRIMARY KEY("numero_reserva", "numero_copia", "isbn_titulo"),
-  FOREIGN KEY("numero_reserva") REFERENCES "transacoes"("numero_transacao"),
+  FOREIGN KEY("numero_reserva") REFERENCES "reservas"("numero_transacao"),
   FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
 );
