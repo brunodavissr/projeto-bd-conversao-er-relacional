@@ -1,3 +1,9 @@
+CREATE TABLE "bibliotecarias" (
+  "matricula" NUMERIC(5) NOT NULL,
+  "nome" VARCHAR(50) NOT NULL,
+  PRIMARY KEY("matricula")
+);
+
 CREATE TABLE "unidades_atendimento" (
   "codigo" NUMERIC(3) NOT NULL,
   "matricula_bibliotecaria" NUMERIC(5) NOT NULL UNIQUE,
@@ -13,12 +19,6 @@ CREATE TABLE "atendentes" (
   "nome" VARCHAR(50) NOT NULL,
   PRIMARY KEY("matricula"),
   FOREIGN KEY("codigo_unidade") REFERENCES "unidades_atendimento"("codigo")
-);
-
-CREATE TABLE "bibliotecarias" (
-  "matricula" NUMERIC(5) NOT NULL,
-  "nome" VARCHAR(50) NOT NULL,
-  PRIMARY KEY("matricula")
 );
 
 CREATE TABLE "telefones_unidade" (
@@ -198,7 +198,7 @@ CREATE TABLE "itens_emprestimo" (
   PRIMARY KEY("numero_item", "numero_emprestimo"),
   FOREIGN KEY("numero_emprestimo") REFERENCES "emprestimos"("numero_transacao"),
   FOREIGN KEY("numero_devolucao") REFERENCES "devolucoes"("numero_transacao"),
-  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo"),
+  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulo"("numero_copia", "isbn_titulo"),
   CHECK (
     ("numero_devolucao" IS NOT NULL AND "situacao_copia" IN('I', 'D')) OR
     ("numero_devolucao" IS NULL AND "situacao_copia" IS NULL)
@@ -245,5 +245,5 @@ CREATE TABLE "copias_reservadas" (
   "data_reservada" DATE NOT NULL,
   PRIMARY KEY("numero_reserva", "numero_copia", "isbn_titulo"),
   FOREIGN KEY("numero_reserva") REFERENCES "reservas"("numero_transacao"),
-  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulos"("numero_copia", "isbn_titulo")
+  FOREIGN KEY("numero_copia", "isbn_titulo") REFERENCES "copias_titulo"("numero_copia", "isbn_titulo")
 );
