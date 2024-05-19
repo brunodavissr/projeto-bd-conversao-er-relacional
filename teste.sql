@@ -26,7 +26,7 @@ CREATE TABLE "bibliotecarias" (
   PRIMARY KEY("matricula")
 );
 
-CREATE TABLE "telefones_unidades" (
+CREATE TABLE "telefones_unidade" (
   "codigo_unidade" NUMERIC(3) NOT NULL,
   "telefone" NUMERIC(10) NOT NULL,
   PRIMARY KEY("codigo_unidade", "telefone"),
@@ -91,27 +91,32 @@ CREATE TABLE "areas_secundarias" (
 
 CREATE TABLE "usuarios_biblioteca" (
   "codigo" NUMERIC(5) NOT NULL,
-  "codigo_unidade" CHAR(4) NULL CHECK(
-    ("tipo_usuario" = 'P' AND "codigo_unidade" IS NOT NULL) OR
-    ("tipo_usuario" = 'A' AND "codigo_unidade" IS NULL)
-  ),
   "nome" VARCHAR(50) NOT NULL,
   "identidade" CHAR(12) NULL,
   "cpf" CHAR(14) NULL,
   "endereco" VARCHAR(100) NOT NULL,
   "sexo" CHAR(1) NOT NULL CHECK("sexo" IN ('M', 'F')),
   "data_nascimento" DATE NOT NULL,
-  "estado_civil" CHAR(1) NOT NULL CHECK("estado_civil" IN ('C', 'S', 'D', 'V')),
-  "matricula_professor" NUMERIC(5) NULL UNIQUE CHECK(
-    ("tipo_usuario" = 'P' AND "matricula_professor" IS NOT NULL) OR
-    ("tipo_usuario" = 'A' AND "matricula_professor" IS NULL)
-  ),
-  "tipo_usuario" CHAR(1) NOT NULL CHECK("tipo_usuario" IN ('A', 'P')),
-  PRIMARY KEY ("codigo"),
+  "estado_civil" CHAR(1) NOT NULL CHECK("estado_civil" IN ('C', 'S', 'D', 'V'))
+  PRIMARY KEY ("codigo")
+);
+
+CREATE TABLE "alunos" (
+  "codigo" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("codigo"),
+  FOREIGN KEY("codigo") REFERENCES "usuarios_biblioteca"("codigo")
+);
+
+CREATE TABLE "professores" (
+  "codigo" NUMERIC(5) NOT NULL,
+  "codigo_unidade" CHAR(4) NOT NULL,
+  "matricula" NUMERIC(5) NOT NULL UNIQUE,
+  PRIMARY KEY("codigo"),
+  FOREIGN KEY("codigo") REFERENCES "usuarios_biblioteca"("codigo"),
   FOREIGN KEY("codigo_unidade") REFERENCES "unidades_academicas"("codigo")
 );
 
-CREATE TABLE "telefones_usuarios" (
+CREATE TABLE "telefones_usuario" (
   "codigo_usuario" NUMERIC(5) NOT NULL,
   "telefone" NUMERIC(10) NOT NULL,
   PRIMARY KEY("codigo_usuario", "telefone"),
@@ -130,7 +135,7 @@ CREATE TABLE "transacoes" (
   FOREIGN KEY("codigo_usuario") REFERENCES "usuarios_biblioteca"("codigo")
 );
 
-CREATE TABLE "copias_titulos" (
+CREATE TABLE "copias_titulo" (
   "numero_copia" NUMERIC(5) NOT NULL,
   "isbn_titulo" NUMERIC(5) NOT NULL,
   "codigo_unidade" NUMERIC(3) NOT NULL,
@@ -176,15 +181,15 @@ CREATE TABLE "cursos_aluno" (
   "matricula" NUMERIC(5) NOT NULL UNIQUE,
   PRIMARY KEY("codigo_curso", "codigo_aluno"),
   FOREIGN KEY("codigo_curso") REFERENCES "cursos"("codigo"),
-  FOREIGN KEY("codigo_aluno") REFERENCES "usuarios_biblioteca"("codigo")
+  FOREIGN KEY("codigo_aluno") REFERENCES "alunos"("codigo")
 );
 
 CREATE TABLE "disciplinas_professor" (
   "codigo_disciplina" CHAR(7) NOT NULL,
-  "matricula_professor" NUMERIC(5) NOT NULL,
-  PRIMARY KEY("codigo_disciplina", "matricula_professor"),
+  "codigo_professor" NUMERIC(5) NOT NULL,
+  PRIMARY KEY("codigo_disciplina", "codigo_professor"),
   FOREIGN KEY("codigo_disciplina") REFERENCES "disciplinas"("codigo"),
-  FOREIGN KEY("matricula_professor") REFERENCES "usuarios_biblioteca"("matricula_professor")
+  FOREIGN KEY("codigo_professor") REFERENCES "professores"("codigo")
 );
 
 CREATE TABLE "copias_reservadas" (
